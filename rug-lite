@@ -265,7 +265,6 @@ rm -fr "/home/${USER}/.local/share/gnome-shell/extensions" || true
 tar -xpJf "$script_dir/data/"$extensions_conf".tar.xz" -C "/home/${USER}/.local/share/gnome-shell/"
 sleep 5
 gnome_rebooting
-fi
 #################
 #1
 gnome_ext_configure
