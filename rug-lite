@@ -145,6 +145,8 @@ function image_installer_for_style () {
 
 # функция отключения всех дополнений
 function gnome_ext_configure () {
+  script_dir=$1;echo "${script_dir}"
+  cd "${script_dir}"
 # отключаем все дополнения гнома и делаем паузу перед и после отключения, что бы гном успел прогрузиться
 echo "отключаем все дополнения гнома и делаем паузу перед и после отключения, что бы гном успел прогрузиться"
 sleep 2
@@ -218,7 +220,7 @@ fi
 echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER"
 rm -f Adwaita-dark.tar.xz
-wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz"
+wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz"
 cd "/usr/share/themes"
 echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/Adwaita-dark.tar.xz"
 rm -f "/home/$USER/Adwaita-dark.tar.xz"
@@ -230,7 +232,7 @@ rm -f "/home/$USER/Adwaita-dark.tar.xz"
 #echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER"
 rm -f rosa-numix-icons.tar.xz
-wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz"
+wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz"
 cd "/usr/share/icons"
 echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/rosa-numix-icons.tar.xz"
 rm -f "/home/$USER/rosa-numix-icons.tar.xz"
@@ -242,7 +244,7 @@ rm -f "/home/$USER/rosa-numix-icons.tar.xz"
 #echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER"
 rm -f "rosa-gnome-wallpapers-v1.tar.xz"
-wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz"
+wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz"
 cd "/usr/share"
 echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/rosa-gnome-wallpapers-v1.tar.xz"
 rm -f "/home/$USER/rosa-gnome-wallpapers-v1.tar.xz"
@@ -252,10 +254,9 @@ fi
 ##################################################################################
 cd "/home/$USER"
 rm -f extensions-pack-ver42.22-10-23.tar.xz
-wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz
+wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz || wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz
 pv "extensions-pack-ver42.22-10-23.tar.xz" | tar -xJ
-rm -f extensions-pack-ver42.22-10-23.tar.xz
-cd extensions-pack-ver42[22-10-23]
+cd extensions-pack-ver42[22-10-23] && rm -f extensions-pack-ver42.22-10-23.tar.xz
 script_dir="/home/$USER/extensions-pack-ver42[22-10-23]";echo "${script_dir}"
 #Проверка что существует папка extensions c доплнениями, если нет
 #копируем распоковываем архив с дополнениями в папку пользователя и ребутим гном сшелл
@@ -270,12 +271,13 @@ tput sgr 0
 #установка дополнений необходимых для [GGS]gnome-gui-switcher gnome 42
 rm -fr "/home/${USER}/.local/share/gnome-shell/extensions" || true
 tar -xpJf "${script_dir}/${extensions_conf}" -C "/home/${USER}/.local/share/gnome-shell/"
+cd "/home/${USER}/.local/share/gnome-shell/extensions" || echo "ошибка установки набора дополнений!!!" && exit 1
 sleep 5
 gnome_rebooting
-rm -fr "${script_dir}"
+
 #################
 #1
-gnome_ext_configure
+gnome_ext_configure "${script_dir}" && rm -fr "${script_dir}"
 
 #2
 image_installer_for_style
