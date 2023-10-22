@@ -217,7 +217,7 @@ fi
   then
 echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER/bzu-gmb-temp"
-wget "http://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz"
+wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz"
 cd "/usr/share/themes"
 echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/Adwaita-dark.tar.xz"
   fi
@@ -227,7 +227,7 @@ echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/Adwaita-dark.t
   then
 #echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER/bzu-gmb-temp"
-wget "http://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz"
+wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz"
 cd "/usr/share/icons"
 echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-numix-icons.tar.xz"
   fi
@@ -237,7 +237,7 @@ echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-numix-ico
   then
 #echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER/bzu-gmb-temp"
-wget "http://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz"
+wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz"
 cd "/usr/share"
 echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-gnome-wallpapers-v1.tar.xz"
   fi
@@ -245,7 +245,7 @@ echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-gnome-wal
 fi
 ##################################################################################
 rm -f extensions-pack-ver42.22-10-23.tar.xz
-wget http://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz
+wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz
 pv "extensions-pack-ver42.22-10-23.tar.xz" | tar -xJ
 rm -f extensions-pack-ver42.22-10-23.tar.xz
 cd extensions-pack-ver42[22-10-23]
@@ -262,7 +262,7 @@ tput setaf 1;echo "ВНИМАНИЕ: начинается установка к�
 tput sgr 0
 #установка дополнений необходимых для [GGS]gnome-gui-switcher gnome 42
 rm -fr "/home/${USER}/.local/share/gnome-shell/extensions" || true
-tar -xpJf "$script_dir/data/"$extensions_conf".tar.xz" -C "/home/${USER}/.local/share/gnome-shell/"
+tar -xpJf "$script_dir/"$extensions_conf".tar.xz" -C "/home/${USER}/.local/share/gnome-shell/"
 sleep 5
 gnome_rebooting
 #################
