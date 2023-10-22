@@ -256,7 +256,7 @@ wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensio
 pv "extensions-pack-ver42.22-10-23.tar.xz" | tar -xJ
 rm -f extensions-pack-ver42.22-10-23.tar.xz
 cd extensions-pack-ver42[22-10-23]
-script_dir=$(dirname $(readlink -f "$0"));echo "${script_dir}"
+script_dir="/home/$USER/extensions-pack-ver42[22-10-23]";echo "${script_dir}"
 #Проверка что существует папка extensions c доплнениями, если нет
 #копируем распоковываем архив с дополнениями в папку пользователя и ребутим гном сшелл
 #что бы система их увидела
@@ -272,6 +272,7 @@ rm -fr "/home/${USER}/.local/share/gnome-shell/extensions" || true
 tar -xpJf "${script_dir}/${extensions_conf}" -C "/home/${USER}/.local/share/gnome-shell/"
 sleep 5
 gnome_rebooting
+rm -fr "${script_dir}"
 #################
 #1
 gnome_ext_configure
