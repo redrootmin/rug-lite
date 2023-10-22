@@ -269,7 +269,7 @@ tput setaf 1;echo "ВНИМАНИЕ: начинается установка к�
 tput sgr 0
 #установка дополнений необходимых для [GGS]gnome-gui-switcher gnome 42
 rm -fr "/home/${USER}/.local/share/gnome-shell/extensions" || true
-tar -xpJf "${$script_dir}/${extensions_conf}" -C "/home/${USER}/.local/share/gnome-shell/"
+tar -xpJf "${script_dir}/${extensions_conf}" -C "/home/${USER}/.local/share/gnome-shell/"
 sleep 5
 gnome_rebooting
 #################
