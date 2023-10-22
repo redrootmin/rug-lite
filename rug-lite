@@ -356,6 +356,7 @@ echo "${pass_user}" | sudo -S dnf install -y --best --allowerasing inxi yad zeni
 #10
 #echo "${pass_user}" | sudo -S dnf install -y gwe
 #объявляем нужные переменные для скрипта
+user_run_script_group=$USER
 polkit_version=`pkaction --version | grep -Eo '[0-9*'.']{1,}'`
 
 if [[ "${polkit_version}" == "0.105" ]]
