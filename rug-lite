@@ -1,0 +1,473 @@
+#!/bin/bash
+#creator by RedRoot(Yaciyna Mikhail) for GAMER STATION [on linux] and Gaming Community OS Linux
+# GPL-3.0 License 
+
+# первичные переменные
+site_packegs="https://abf.rosalinux.ru"
+site_source_app="https://github.com/"
+PATH_USER_CONF="/home/${USER}/.config_rug"
+start_date=$(date +"%d.%m.%Y-%H:%M:%S")
+
+#определяем какая система запустила ggs
+linuxos_version=`cat "/etc/os-release" | grep "PRETTY_NAME" | sed 's/PRETTY_NAME=//g' | sed 's/"//g'`
+linuxos_gnome="true"
+
+linux_os_test() {
+    # проверка что линукс система с рабочим окружением GNOME
+    if [ ! -e /usr/bin/gnome-shell ];then linuxos_gnome="false";fi
+
+    #проверяем что система совместима с RUG
+    if echo "${linuxos_version}" | grep -ow "ROSA Fresh Desktop" > /dev/null && echo "${linuxos_gnome}" | grep -ow "true" > /dev/null
+        then
+            #tput setaf 3;echo -n "$1:";tput setaf 2;echo "$package_status";tput sgr 0
+            tput sgr 0;echo -n "Операциооная система: ${linuxos_version} [GNOME]";tput setaf 2;echo -n " СОВМЕСТИМА";tput sgr 0;echo " с RUG"
+            tput sgr 0
+            LINUXOS_RUN="rosa"
+
+                else
+                tput sgr 0;echo -n "Операциооная система: ${linuxos_version} [GNOME]";tput setaf 1;echo -n " НЕ СОВМЕСТИМА";tput sgr 0;echo " с RUG"
+                # GTK_THEME="Adwaita-dark" zenity --error --ellipsize  --timeout=5 --text="Данная операционная система [${linuxos_version}] не совместима с RUG"
+                exit 1
+fi
+}
+
+no_root() {
+
+    if [ "$UID" -eq 0 ];then
+         echo -n "скрипт не запущен из под root";tput setaf 1;echo " - НЕТ!";tput sgr0;exit 1
+        else
+        echo -n "скрипт не запущен из под root";tput setaf 2;echo " - ДА!";tput sgr0
+    fi
+}
+
+# функция перезагрузки гнома
+function gnome_rebooting () {
+    killall -SIGQUIT gnome-shell
+    sleep 5
+}
+
+# функция рекомендации перезагрузки системы
+function ggs_rebooting () {
+GTK_THEME="Adwaita-dark" yad --title="$version" --image-on-top --picture --size=fit --filename="${script_dir}/icons/gnome-ext-pack.png" --width=327 --height=327 --center --inc=256  --text-align=center --text="ТРЕБУЕТСЯ ПЕРЕАГРУЗКА GNOME, для этого нажмите alt+f2, далее введите r и нажмите inter!" --timeout=5 --timeout-indicator=bottom 
+}
+
+
+internet_check() {
+ site_internet_test="$1"
+ INTERNET_CHECK="0"
+      # проверка на наличие сетевого доступа до ресурса
+      wget -q --spider ${site_internet_test}
+      if [ $? -eq 0 ]; then
+          INTERNET_CHECK="1"
+      fi
+  
+}
+
+
+start_test_rug() {
+
+ #!проверяем что скрипт установки не запущен от пользователя root
+ no_root
+
+ #!проверяем что система совместима с RUG
+ linuxos_version=$1
+  echo -n "Версия операционной системы Линукс";tput setaf 2;echo " - [$linuxos_version]";tput sgr0
+  linux_os_test "$linuxos_version"
+
+    #! Проверяем интернет ресурсы
+    SITE_APP="0"
+  # проверка на наличие доступа до ресурса с пакетами для установки
+  site_packegs=$2
+  internet_check $site_packegs
+      if [ "$INTERNET_CHECK" -eq 0 ]; then
+
+          echo -n "Доступа до ресурса [$site_packegs]";tput setaf 1;echo " - НЕТ!";tput sgr0
+          else 
+           echo -n "Доступ до ресурса [$site_packegs]";tput setaf 2;echo " - ЕСТЬ!";tput sgr0
+           SITE_APP="1"
+      fi
+    SITE_SOURCE="0"
+        # проверка на наличие доступа до ресурса с исходным кодом
+        site_source_app=$3
+        internet_check $site_source_app
+              if [ "$INTERNET_CHECK" -eq 0 ]; then
+
+          echo -n "Доступа до ресурса [$site_source_app]";tput setaf 1;echo " - НЕТ!";tput sgr0
+          else 
+           echo -n "Доступ до ресурса [$site_source_app]";tput setaf 2;echo " - ЕСТЬ!";tput sgr0
+           SITE_SOURCE="1"
+      fi
+
+
+}
+
+core_conf_create () {
+    # В РАРАБОТКЕ!
+    # Проверка что существует папка конфигурации пользователя в его окружении, если нет, создаем ее и копируем туда конфиг по умолчанию
+    if [ ! -d "$PATH_USER_CONF" ]
+    then
+    #! папки .config_rug нет в окружении пользователя, создаем!
+        tput setaf 1; echo "папки .kmv-config нет в окружении пользователя $USER, создаем";tput sgr0
+        mkdir -p "/home/${USER}/.kmv-config"
+        PATH_USER_CONF="/home/${USER}/.kmv-config"
+        cp -RT "$PATH_CORE_APP/data/.kmv-config" "$PATH_USER_CONF"
+        ln -s "/home/$USER/.kmv-config" "$PATH_CORE_APP/.kmv-config"
+        tput setaf 2; echo "папка конфигурации пользователя расположена [$PATH_USER_CONF]";tput sgr0
+        else
+            PATH_USER_CONF="/home/${USER}/.kmv-config"
+            tput setaf 2; echo "папка конфигурации пользователя расположена [$PATH_USER_CONF]";tput sgr0
+    fi
+}
+
+function image_installer_for_style () {
+    
+    style_image_func="42.jpg"
+    # установка обоев для стиля, указанного в настройках
+# if [ ! -f "/usr/share/backgrounds/$style_image_func" ]; then
+#    echo "${pass_user}" | sudo -S cp -f "$gnome_42_dir/$style_run_func/$style_image_func" /usr/share/backgrounds/
+#    echo "картинка добавлена в папку /usr/share/backgrounds"
+#    else
+#    echo "картинка есть в папке /usr/share/backgrounds"
+#    fi
+  gsettings set org.gnome.desktop.background picture-uri-dark file:////usr/share/backgrounds/$style_image_func
+  gsettings set org.gnome.desktop.background picture-uri file:////usr/share/backgrounds/$style_image_func
+   
+   # замена картинки на входе в систему, на указанную в настройках стиля
+   if [ ! -f "/usr/share/wallpapers/ROSA-light-default-backup.svg" ]; then
+
+    echo "${pass_user}" | sudo -S cp -f "/usr/share/wallpapers/ROSA-light-default.svg" "/usr/share/wallpapers/ROSA-light-default-backup.svg"
+    echo "сделан бикап офицальной картинки росы"
+    else
+    echo "бикап офицальной картинки росы уже сделан"
+    fi
+  echo "${pass_user}" | sudo -S cp -f "/usr/share/backgrounds/$style_image_func" "/usr/share/wallpapers/ROSA-light-default.svg"
+}
+
+# функция отключения всех дополнений
+function gnome_ext_configure () {
+# отключаем все дополнения гнома и делаем паузу перед и после отключения, что бы гном успел прогрузиться
+echo "отключаем все дополнения гнома и делаем паузу перед и после отключения, что бы гном успел прогрузиться"
+sleep 2
+readarray -t ge_list < "gnome-extensions-list-all";for (( i=0; i <= (${#ge_list[*]}-1); i=i+1 ));do gnome-extensions disable "${ge_list[$i]}";done
+sleep 4
+
+#сбрасываем все настройки дополнений гнома и загружем которые сохранены для выбраного стиля
+echo "сбрасываем все настройки дополнений гнома и загружем которые сохранены для выбраного стиля"
+dconf reset -f /org/gnome/shell/extensions/
+dconf load /org/gnome/shell/extensions/ < "extensions.conf"
+
+# включем дополнения для выбраного стиля
+echo "включем дополнения для выбраного стиля"
+readarray -t ge_list < "gnome-extensions-list-enable";for (( i=0; i <= (${#ge_list[*]}-1); i=i+1 ));do gnome-extensions enable "${ge_list[$i]}";done
+sleep 2
+# мягкая перезагрузка гнома и пауза что бы он смог перезагрузиться
+echo "мягкая перезагрузка гнома и пауза что бы он смог перезагрузиться"
+gnome_rebooting
+echo "все команды для настройки стиля: redroot выполнены!"
+}
+
+
+# ОСНОВНЫЕ КОМАНДЫ RUG
+
+case "$1" in
+
+"-t"|"--test")
+start_test_rug "$linuxos_version" "$site_packegs" "$site_source_app"
+;;
+
+"-i"|"--install")
+
+запрос пароля root для установки ПО необходимого для bzu-gmb
+read -sp 'Введите Пароль root:' pass_user0
+echo " "
+
+
+#проверяем ввел пользователь пароль или нет
+if [[ "${pass_user0}" == "" ]]
+then
+tput setaf 1; echo "требуется ввести пароль root!"
+tput sgr0
+sleep 5
+exit 1
+fi
+export pass_user=${pass_user0}
+
+##################################################################################
+# Проверка что существует папка applications, если нет, создаем ее
+if [ ! -d "/home/${USER}/.local/share/applications" ]
+then
+mkdir -p "/home/${USER}/.local/share/applications"
+fi
+
+# Проверка что существует папка autostart, если нет, создаем ее
+ if [ ! -d "/home/${USER}/.config/autostart" ]
+ then
+mkdir -p "/home/${USER}/.config/autostart"
+else
+ if [ -e /home/${USER}/.config/autostart/gnome-desktop-icons-touch.desktop ] || [ -e /home/${USER}/.config/autostart/gnome-desktop-icons.desktop ];then
+ rm -f /home/${USER}/.config/autostart/gnome-desktop-icons-touch.desktop
+ rm -f /home/${USER}/.config/autostart/gnome-desktop-icons.desktop
+ fi
+fi
+##################################################################################
+# установка темы/иконок/обои для GNOME
+ if [ -e /usr/bin/gnome-shell ];then
+# Проверка что существует папка c темой Adwaita-dark , если нет, создаем ее
+  if [ ! -d "/usr/share/themes/Adwaita-dark/gnome-shell" ]
+  then
+echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
+cd "/home/$USER/bzu-gmb-temp"
+wget "http://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz"
+cd "/usr/share/themes"
+echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/Adwaita-dark.tar.xz"
+  fi
+
+# Проверка что существует папка c иконки numix-icons , если нет, создаем ее
+  if [ ! -d "/usr/share/icons/Numix" ]
+  then
+#echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
+cd "/home/$USER/bzu-gmb-temp"
+wget "http://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz"
+cd "/usr/share/icons"
+echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-numix-icons.tar.xz"
+  fi
+
+# Проверка что существует папки c обоями redroot wallpapers , если нет, создаем ее
+  if [ ! -d "/usr/share/backgrounds" ]
+  then
+#echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
+cd "/home/$USER/bzu-gmb-temp"
+wget "http://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz"
+cd "/usr/share"
+echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-gnome-wallpapers-v1.tar.xz"
+  fi
+
+fi
+##################################################################################
+rm -f extensions-pack-ver42.22-10-23.tar.xz
+wget http://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz
+pv "extensions-pack-ver42.22-10-23.tar.xz" | tar -xJ
+rm -f extensions-pack-ver42.22-10-23.tar.xz
+cd extensions-pack-ver42[22-10-23]
+script_dir=$(dirname $(readlink -f "$0"))
+#Проверка что существует папка extensions c доплнениями, если нет
+#копируем распоковываем архив с дополнениями в папку пользователя и ребутим гном сшелл
+#что бы система их увидела
+#ЗАБИКАПИТЬ ДЕФОЛТНЫЕ ДОПОЛНЕНИЯ!
+extensions_conf="extensions-pack-ver42[22-10-23].tar.gz"
+cd "/home/${USER}/.local/share/gnome-shell/"
+tar cf - extensions | xz -z - > "extensions_old.tar.xz"
+##################
+tput setaf 1;echo "ВНИМАНИЕ: начинается установка комплекта дополнений необходимых для [GGS]gnome-gui-switcher-rosa-gnome42"
+tput sgr 0
+#установка дополнений необходимых для [GGS]gnome-gui-switcher gnome 42
+rm -fr "/home/${USER}/.local/share/gnome-shell/extensions" || true
+tar -xpJf "$script_dir/data/"$extensions_conf".tar.xz" -C "/home/${USER}/.local/share/gnome-shell/"
+sleep 5
+gnome_rebooting
+fi
+#################
+#1
+gnome_ext_configure
+
+#2
+image_installer_for_style
+
+#3
+dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'virt-manager.desktop', 'rosa-virtualbox.desktop', 'vmware-player.desktop', 'VSCodium.desktop', 'bzu-gmb.desktop', 'org.gnome.Settings.desktop', 'org.gnome.tweaks.desktop', 'pavucontrol-gtk.desktop', 'org.corectrl.corectrl.desktop', 'org.gnome.Extensions.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Calculator.desktop', 'org.gnome.Screenshot.desktop', 'kde5-org.kde.krita.desktop', 'org.inkscape.Inkscape.desktop', 'nemo.desktop', 'audacious-gtk.desktop', 'audacity.desktop', 'org.shotcut.Shotcut.desktop', 'org.kde.kdenlive.desktop', 'com.obsproject.Studio.desktop', 'org.qbittorrent.qBittorrent.desktop', 'firefox.desktop', 'telegramdesktop.desktop', 'PortProton.desktop', 'protonup-qt.desktop', 'steam.desktop']"
+
+#4
+gsettings set org.gnome.mutter dynamic-workspaces false
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 4
+gsettings set org.gnome.desktop.wm.preferences button-layout "appmenu:minimize,maximize,close"
+gsettings set org.gnome.mutter attach-modal-dialogs false
+gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
+gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+gsettings set org.gnome.desktop.wm.preferences theme Adwaita
+gsettings set org.gnome.gedit.preferences.editor scheme oblivion
+gsettings set  org.gnome.desktop.interface cursor-theme elementary
+gsettings set org.gnome.desktop.interface icon-theme Numix-Circle
+
+#5
+##################################################################################
+echo "подключение репозитория: rosa_gaming"
+echo "[rosa_gaming]
+name=rosa_gaming
+baseurl=http://abf-downloads.rosalinux.ru/rosa_gaming_personal/repository/rosa2021.1/x86_64/main/release/
+gpgcheck=0
+enabled=1
+cost=998
+
+[rosa_gaming-i686]
+name=mesa-git-i686
+baseurl=http://abf-downloads.rosalinux.ru/rosa_gaming_personal/repository/rosa2021.1/i686/main/release/
+gpgcheck=0
+enabled=1
+cost=999" > /tmp/rosa_gaming.repo
+echo "${pass_user}" | sudo -S mv -f /tmp/rosa_gaming.repo /etc/yum.repos.d
+##################################################################################
+echo "подключение репозитория: mesa-redroot-devel"
+eecho "[mesa-redroot-devel-x86_64]
+name=mesa-redroot-devel-x86_64
+baseurl=http://abf-downloads.rosalinux.ru/mesa_redroot_devel_personal/repository/rosa2021.1/x86_64/main/release/
+gpgcheck=0
+enabled=1
+cost=999
+
+[mesa-redroot-devel-i686]
+name=mesa-redroot-devel-i686
+baseurl=http://abf-downloads.rosalinux.ru/mesa_redroot_devel_personal/repository/rosa2021.1/i686/main/release/
+gpgcheck=0
+enabled=1
+cost=1000" > /tmp/mesa-redroot-devel.repo
+echo "${pass_user}" | sudo -S mv -f /tmp/mesa-redroot-devel.repo /etc/yum.repos.d
+##################################################################################
+echo "подключение репозитория: rosa-gaming-system-apps"
+echo "[rosa-gaming-system-apps-x86_64]
+name=rosa-gaming-system-apps-x86_64
+baseurl=http://abf-downloads.rosalinux.ru/rosa_gaming_system_apps_personal/repository/rosa2021.1/x86_64/main/release/
+gpgcheck=0
+enabled=1
+cost=999
+
+[rosa-gaming-system-apps-i686]
+name=rosa-gaming-system-apps-i686
+baseurl=http://abf-downloads.rosalinux.ru/rosa_gaming_system_apps_personal/repository/rosa2021.1/i686/main/release/
+gpgcheck=0
+enabled=1
+cost=1000" > /tmp/rosa-gaming-system-apps.repo
+echo "${pass_user}" | sudo -S mv -f /tmp/rosa-gaming-system-apps.repo /etc/yum.repos.d
+##################################################################################
+
+#6
+echo "${pass_user}" | sudo -S dnf --refresh distrosync -y
+
+#7
+echo "${pass_user}" | sudo -S dnf remove -y gnome-robots four-in-a-row gnuchess aislerior gnome-chess gnome-mahjongg gnome-sudoku gnome-tetravex iagno lightsoff tail five-or-more gnome-klotski kmahjongg kmines klines kpat
+
+#8
+echo "${pass_user}" | sudo -S dnf install -y kernel-6.5-xanmod.x86_64 kernel-6.5-xanmod-uml.x86_64 kernel-6.5-xanmod-uml-modules kernel-6.5-xanmod-devel
+
+#9
+echo "${pass_user}" | sudo -S dnf install -y python3-pip
+pip3 install Xlib pygame pywebview
+echo "${pass_user}" | sudo -S dnf install -y cpupower virt-manager virt-manager-common qemu.x86_64 qemu.i686 qemu-common.x86_64 qemu-common.i686 qemu-device-display-virtio-gpu.x86_64 qemu-device-display-virtio-gpu.i686 qemu-device-display-virtio-gpu-pci.x86_64 qemu-device-display-virtio-gpu-pci.i686 qemu-kvm nemo lib64nemo-extensions-devel lib64nemo-extensions1 lib64nemo-gir3.0 nemo-audio-tab nemo-compare nemo-fileroller nemo-image-converter nemo-python nemo-python-devel nemo-pastebin meld gksu stacer wavemon cpu-x psensor kdiskmark mangohud vkbasalt goverlay gamescope system-monitoring-center encfs fceux krita kdenlive
+echo "${pass_user}" | sudo -S dnf install -y --best --allowerasing inxi yad zenity xow libusb-compat0.1_4 paprefs pavucontrol ananicy p7zip python3 grub-customizer libfuse2-devel libfuse3-devel libssl1.1 neofetch git meson ninja gcc gcc-c++ cmake glibc-devel dbus-devel glslang vulkan lib64vulkan-devel.x86_64 lib64vulkan-intel-devel lib64vulkan1 libvulkan-devel libvulkan-intel-devel.i686 libvulkan1 fio
+
+#10
+#echo "${pass_user}" | sudo -S dnf install -y gwe
+#объявляем нужные переменные для скрипта
+polkit_version=`pkaction --version | grep -Eo '[0-9*'.']{1,}'`
+
+if [[ "${polkit_version}" == "0.105" ]]
+then
+rule_dir_install="/etc/polkit-1/localauthority/50-local.d"
+rule_file_install="90-corectrl.pkla"
+else
+rule_dir_install="/etc/polkit-1/rules.d"
+rule_file_install="90-corectrl.rules"
+fi
+echo "${pass_user}" | sudo -S cat "${rule_dir_install}/${rule_file_install}" > /dev/null || rule_file_create="yes"
+
+export dir_grub_file="/etc/default"
+export grub_file_name="grub"
+grub_flag_base=(GRUB_CMDLINE_LINUX_DEFAULT amdgpu.ppfeaturemask=0xffffffff GRUB_DEFAULT saved GRUB_SAVEDEFAULT true GRUB_HIDDEN_TIMEOUT 120 GRUB_TIMEOUT 5 GRUB_TIMEOUT_STYLE menu)
+echo "${pass_user}" | sudo -S cp -p -f "/etc/default/grub" "/etc/default/grub.bak"
+echo "сделан бикап файла grub /etc/default/grub.bak"
+
+
+function install_flags_grub_kernel_rosa {
+flag_status=`cat "${dir_grub_file}/${grub_file_name}" | grep -oh "$2"`
+if [[ "${flag_status}" == "$2" ]];then
+tput setaf 3
+echo "флаг $2 уже добавлен в grub" 
+tput sgr0 
+echo "${pass_user}" | sudo -S cat "${dir_grub_file}/${grub_file_name}" | grep "$2"
+else
+echo "${pass_user}" | sudo -S sed -i '0,/'$1'=\x27/ s//'$1'=\x27'$2' /' ${dir_grub_file}/${grub_file_name}
+tput setaf 2
+echo "${pass_user}" | sudo -S cat "${dir_grub_file}/${grub_file_name}" | grep -oh "$2" > /dev/null | echo "флаг $2 добавлен в grub" | tput sgr0 | echo "${pass_user}" | sudo -S cat ${dir_grub_file}/${grub_file_name} | grep "$1"
+fi
+}
+
+# установка  обновление системы
+echo "${pass_user}" | sudo -S dnf update -y
+echo "${pass_user}" | sudo -S dnf distro-sync -y
+echo "${pass_user}" | sudo -S dnf autoremove -y
+echo "${pass_user}" | sudo -S dnf clean packages
+echo "${pass_user}" | sudo -S dnf reinstall -y corectrl
+
+#добовление маски в файл grub для полного управления питанием и частотами в драйвере amdgpu
+install_flags_grub_kernel_rosa ${grub_flag_base[0]} ${grub_flag_base[1]}
+echo "${pass_user}" | sudo -S update-grub2
+
+#формируем информацию о том что в итоге установили и показываем в терминал
+app="corectrl"
+tput setaf 2
+package_status="-y install $app"
+rpm -qa | grep "$app" > /dev/null || package_status="-y reinstall $app" | tput setaf 3
+echo "${pass_user}" | sudo -S dnf $package_status;package_info="Пакет:$app установлен!"
+rpm -qa | grep "$app" > /dev/null || tput setaf 3 | package_info="ВНИМАНИЕ: пакет:$app не получилось установить :(";tput sgr0
+
+#создание файла с правилом запуска corectrl без запроса пароля
+rule_dir_install="/etc/polkit-1/localauthority/50-local.d"
+rule_file_install="90-corectrl.pkla"
+echo "${pass_user}" | sudo -S cat "${rule_dir_install}/${rule_file_install}" > /dev/null || rule_file_create="yes"
+if [[ "${rule_file_create}" == "yes" ]]
+then
+cd "${script_dir}/modules-temp/${name_script}"
+echo "[User permissions]" > ${rule_file_install}
+echo "Identity=unix-group:$user_run_script_group" >> ${rule_file_install}
+echo "Action=org.corectrl.*" >> ${rule_file_install}
+echo "ResultActive=yes" >> ${rule_file_install}
+echo "${pass_user}" | sudo -S mv "${rule_file_install}" "${rule_dir_install}"
+tput setaf 2
+echo "файлы правила запуска corectrl без sudo были созданы!"
+echo "${rule_dir_install}/${rule_file_install}"
+tput sgr0
+echo "${pass_user}" | sudo -S cat "${rule_dir_install}/${rule_file_install}"
+
+rule_dir_install="/etc/polkit-1/rules.d"
+rule_file_install="90-corectrl.rules"
+echo 'polkit.addRule(function(action, subject) {
+    if ((action.id == "org.corectrl.helper.init" ||
+         action.id == "org.corectrl.helperkiller.init") &&
+        subject.local == true &&
+        subject.active == true &&
+        subject.isInGroup("'$user_run_script_group'")) {
+            return polkit.Result.YES;
+    }
+});' > ${rule_file_install}
+echo "${pass_user}" | sudo -S mv "${rule_file_install}" "${rule_dir_install}"
+tput setaf 2
+echo "${rule_dir_install}/${rule_file_install}"
+tput sgr0
+echo "${pass_user}" | sudo -S cat "${rule_dir_install}/${rule_file_install}"
+else
+tput setaf 3
+echo "файл правила запуска corectrl без sudo уже создан"
+tput sgr0
+echo "${pass_user}" | sudo -S cat "${rule_dir_install}/${rule_file_install}"
+fi
+
+#=====================================================================================
+
+
+
+
+#tput setaf 1
+#echo "терминальный режим на стадии разработки!"
+#tput sgr0
+;;
+
+
+*)
+echo "###RUG - Rosa Utility for GAMING - КОВРИК###
+-t или --test           - тест системы на совместимость и проверка ресурсов
+-i или --install        - автономная установка всего пакета rug-lite
+"
+;;
+esac
+
+
+exit 1
