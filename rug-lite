@@ -217,9 +217,11 @@ fi
   then
 echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER"
+rm -f Adwaita-dark.tar.xz
 wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz"
 cd "/usr/share/themes"
-echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/Adwaita-dark.tar.xz"
+echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/Adwaita-dark.tar.xz"
+rm -f "/home/$USER/Adwaita-dark.tar.xz"
   fi
 
 # Проверка что существует папка c иконки numix-icons , если нет, создаем ее
@@ -227,9 +229,11 @@ echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/Adwaita-dark.t
   then
 #echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER"
+rm -f rosa-numix-icons.tar.xz
 wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz"
 cd "/usr/share/icons"
-echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-numix-icons.tar.xz"
+echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/rosa-numix-icons.tar.xz"
+rm -f "/home/$USER/rosa-numix-icons.tar.xz"
   fi
 
 # Проверка что существует папки c обоями redroot wallpapers , если нет, создаем ее
@@ -237,9 +241,11 @@ echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-numix-ico
   then
 #echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
 cd "/home/$USER"
+rm -f "rosa-gnome-wallpapers-v1.tar.xz"
 wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz"
 cd "/usr/share"
-echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/bzu-gmb-temp/rosa-gnome-wallpapers-v1.tar.xz"
+echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/rosa-gnome-wallpapers-v1.tar.xz"
+rm -f "/home/$USER/rosa-gnome-wallpapers-v1.tar.xz"
   fi
 
 fi
