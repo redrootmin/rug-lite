@@ -367,6 +367,7 @@ echo "${pass_user}" | sudo -S dnf install -y --best --allowerasing inxi yad zeni
 #echo "${pass_user}" | sudo -S dnf install -y gwe
 #объявляем нужные переменные для скрипта
 user_run_script_group=$USER
+script_dir="/home/$USER"
 polkit_version=`pkaction --version | grep -Eo '[0-9*'.']{1,}'`
 
 if [[ "${polkit_version}" == "0.105" ]]
@@ -425,7 +426,7 @@ rule_file_install="90-corectrl.pkla"
 echo "${pass_user}" | sudo -S cat "${rule_dir_install}/${rule_file_install}" > /dev/null || rule_file_create="yes"
 if [[ "${rule_file_create}" == "yes" ]]
 then
-cd "${script_dir}/modules-temp/${name_script}"
+cd "${script_dir}"
 echo "[User permissions]" > ${rule_file_install}
 echo "Identity=unix-group:$user_run_script_group" >> ${rule_file_install}
 echo "Action=org.corectrl.*" >> ${rule_file_install}
