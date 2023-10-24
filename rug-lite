@@ -316,7 +316,7 @@ cost=999" > /tmp/rosa_gaming.repo
 echo "${pass_user}" | sudo -S mv -f /tmp/rosa_gaming.repo /etc/yum.repos.d
 ##################################################################################
 echo "подключение репозитория: mesa-redroot-devel"
-eecho "[mesa-redroot-devel-x86_64]
+echo "[mesa-redroot-devel-x86_64]
 name=mesa-redroot-devel-x86_64
 baseurl=http://abf-downloads.rosalinux.ru/mesa_redroot_devel_personal/repository/rosa2021.1/x86_64/main/release/
 gpgcheck=0
