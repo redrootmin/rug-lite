@@ -356,7 +356,7 @@ echo "${pass_user}" | sudo -S dnf remove -y gnome-robots four-in-a-row gnuchess 
 
 #8
 echo "${pass_user}" | sudo -S dnf install -y kernel-6.5-xanmod.x86_64 kernel-6.5-xanmod-uml.x86_64 kernel-6.5-xanmod-uml-modules kernel-6.5-xanmod-devel
-
+echo "${pass_user}" | sudo -S dnf remove -y rtl8821au-blacklist rtl8821ce-blacklist
 #9
 echo "${pass_user}" | sudo -S dnf install -y python3-pip
 pip3 install Xlib pygame pywebview
