@@ -177,7 +177,10 @@ case "$1" in
 start_test_rug "$linuxos_version" "$site_packegs" "$site_source_app"
 ;;
 
-"-i"|"--install")
+"-fa"|"--full-auto")
+
+# проверяем что система соотвествует требованиям rug-lite
+start_test_rug "$linuxos_version" "$site_packegs" "$site_source_app"
 
 запрос пароля root для установки ПО необходимого для bzu-gmb
 read -sp 'Введите Пароль root:' pass_user0
@@ -214,88 +217,90 @@ fi
 ##################################################################################
 # установка темы/иконок/обои для GNOME
  if [ -e /usr/bin/gnome-shell ];then
-# Проверка что существует папка c темой Adwaita-dark , если нет, создаем ее
-  if [ ! -d "/usr/share/themes/Adwaita-dark/gnome-shell" ]
-  then
-echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
-cd "/home/$USER"
-rm -f Adwaita-dark.tar.xz
-wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz"
-cd "/usr/share/themes"
-echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/Adwaita-dark.tar.xz"
-rm -f "/home/$USER/Adwaita-dark.tar.xz"
-  fi
+  # Проверка что существует папка c темой Adwaita-dark , если нет, создаем ее
+    if [ ! -d "/usr/share/themes/Adwaita-dark/gnome-shell" ]
+    then
+  echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
+  cd "/home/$USER"
+  rm -f Adwaita-dark.tar.xz
+  wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/Adwaita-dark.tar.xz"
+  cd "/usr/share/themes"
+  echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/Adwaita-dark.tar.xz"
+  rm -f "/home/$USER/Adwaita-dark.tar.xz"
+    fi
 
-# Проверка что существует папка c иконки numix-icons , если нет, создаем ее
-  if [ ! -d "/usr/share/icons/Numix" ]
-  then
-#echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
-cd "/home/$USER"
-rm -f rosa-numix-icons.tar.xz
-wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz"
-cd "/usr/share/icons"
-echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/rosa-numix-icons.tar.xz"
-rm -f "/home/$USER/rosa-numix-icons.tar.xz"
-  fi
+  # Проверка что существует папка c иконки numix-icons , если нет, создаем ее
+    if [ ! -d "/usr/share/icons/Numix" ]
+    then
+  #echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
+  cd "/home/$USER"
+  rm -f rosa-numix-icons.tar.xz
+  wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-numix-icons.tar.xz"
+  cd "/usr/share/icons"
+  echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/rosa-numix-icons.tar.xz"
+  rm -f "/home/$USER/rosa-numix-icons.tar.xz"
+    fi
 
-# Проверка что существует папки c обоями redroot wallpapers , если нет, создаем ее
-  if [ ! -d "/usr/share/backgrounds" ]
-  then
-#echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
-cd "/home/$USER"
-rm -f "rosa-gnome-wallpapers-v1.tar.xz"
-wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz"
-cd "/usr/share"
-echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/rosa-gnome-wallpapers-v1.tar.xz"
-rm -f "/home/$USER/rosa-gnome-wallpapers-v1.tar.xz"
-  fi
+  # Проверка что существует папки c обоями redroot wallpapers , если нет, создаем ее
+    if [ ! -d "/usr/share/backgrounds" ]
+    then
+  #echo "${pass_user}" | sudo -S rm -rf "/usr/share/themes/Adwaita-dark"
+  cd "/home/$USER"
+  rm -f "rosa-gnome-wallpapers-v1.tar.xz"
+  wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz" || wget "https://github.com/redrootmin/bzu-gmb-modules/releases/download/v1/rosa-gnome-wallpapers-v1.tar.xz"
+  cd "/usr/share"
+  echo "${pass_user}" | sudo -S tar -xpJf "/home/$USER/rosa-gnome-wallpapers-v1.tar.xz"
+  rm -f "/home/$USER/rosa-gnome-wallpapers-v1.tar.xz"
+    fi
+
+
+  ##################################################################################
+  cd "/home/$USER"
+  rm -f extensions-pack-ver42.22-10-23.tar.xz
+  wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz || wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz
+  pv "extensions-pack-ver42.22-10-23.tar.xz" | tar -xJ
+  cd extensions-pack-ver42[22-10-23] && rm -f extensions-pack-ver42.22-10-23.tar.xz
+  script_dir="/home/$USER/extensions-pack-ver42[22-10-23]";echo "${script_dir}"
+  #Проверка что существует папка extensions c доплнениями, если нет
+  #копируем распоковываем архив с дополнениями в папку пользователя и ребутим гном сшелл
+  #что бы система их увидела
+  #ЗАБИКАПИТЬ ДЕФОЛТНЫЕ ДОПОЛНЕНИЯ!
+  extensions_conf="extensions-pack-ver42[22-10-23].tar.gz"
+  cd "/home/${USER}/.local/share/gnome-shell/"
+  tar cf - extensions | xz -z - > "extensions_old.tar.xz"
+  ##################
+  tput setaf 1;echo "ВНИМАНИЕ: rug-lite начинает установку комплекта дополнений gnome 42+ для rosa fresh, ожидайте"
+  tput sgr 0
+  #установка дополнений gnome 42
+  rm -fr "/home/${USER}/.local/share/gnome-shell/extensions" || true
+  tar -xf "${script_dir}/${extensions_conf}"
+  cd "/home/${USER}/.local/share/gnome-shell/extensions" || echo "ошибка установки набора дополнений!"
+  sleep 2
+  gnome_rebooting
+
+  #################
+  #1
+  gnome_ext_configure "${script_dir}" && rm -fr "${script_dir}"
+
+  #2
+  image_installer_for_style
+
+  #3
+  dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'virt-manager.desktop', 'rosa-virtualbox.desktop', 'vmware-player.desktop', 'VSCodium.desktop', 'bzu-gmb.desktop', 'org.gnome.Settings.desktop', 'org.gnome.tweaks.desktop', 'pavucontrol-gtk.desktop', 'org.corectrl.corectrl.desktop', 'org.gnome.Extensions.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Calculator.desktop', 'org.gnome.Screenshot.desktop', 'kde5-org.kde.krita.desktop', 'org.inkscape.Inkscape.desktop', 'nemo.desktop', 'audacious-gtk.desktop', 'audacity.desktop', 'org.shotcut.Shotcut.desktop', 'org.kde.kdenlive.desktop', 'com.obsproject.Studio.desktop', 'org.qbittorrent.qBittorrent.desktop', 'firefox.desktop', 'telegramdesktop.desktop', 'PortProton.desktop', 'protonup-qt.desktop', 'steam.desktop']"
+
+  #4
+  gsettings set org.gnome.mutter dynamic-workspaces false
+  gsettings set org.gnome.desktop.wm.preferences num-workspaces 4
+  gsettings set org.gnome.desktop.wm.preferences button-layout "appmenu:minimize,maximize,close"
+  gsettings set org.gnome.mutter attach-modal-dialogs false
+  gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
+  gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+  gsettings set org.gnome.desktop.wm.preferences theme Adwaita
+  gsettings set org.gnome.gedit.preferences.editor scheme oblivion
+  gsettings set  org.gnome.desktop.interface cursor-theme elementary
+  gsettings set org.gnome.desktop.interface icon-theme Numix-Circle
 
 fi
-##################################################################################
-cd "/home/$USER"
-rm -f extensions-pack-ver42.22-10-23.tar.xz
-wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz || wget https://github.com/redrootmin/bzu-gmb-modules/releases/download/v3/extensions-pack-ver42.22-10-23.tar.xz
-pv "extensions-pack-ver42.22-10-23.tar.xz" | tar -xJ
-cd extensions-pack-ver42[22-10-23] && rm -f extensions-pack-ver42.22-10-23.tar.xz
-script_dir="/home/$USER/extensions-pack-ver42[22-10-23]";echo "${script_dir}"
-#Проверка что существует папка extensions c доплнениями, если нет
-#копируем распоковываем архив с дополнениями в папку пользователя и ребутим гном сшелл
-#что бы система их увидела
-#ЗАБИКАПИТЬ ДЕФОЛТНЫЕ ДОПОЛНЕНИЯ!
-extensions_conf="extensions-pack-ver42[22-10-23].tar.gz"
-cd "/home/${USER}/.local/share/gnome-shell/"
-tar cf - extensions | xz -z - > "extensions_old.tar.xz"
-##################
-tput setaf 1;echo "ВНИМАНИЕ: начинается установка комплекта дополнений необходимых для [GGS]gnome-gui-switcher-rosa-gnome42"
-tput sgr 0
-#установка дополнений необходимых для [GGS]gnome-gui-switcher gnome 42
-rm -fr "/home/${USER}/.local/share/gnome-shell/extensions" || true
-tar -xf "${script_dir}/${extensions_conf}"
-cd "/home/${USER}/.local/share/gnome-shell/extensions" || echo "ошибка установки набора дополнений!"
-sleep 2
-gnome_rebooting
-
-#################
-#1
-gnome_ext_configure "${script_dir}" && rm -fr "${script_dir}"
-
-#2
-image_installer_for_style
-
-#3
-dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'virt-manager.desktop', 'rosa-virtualbox.desktop', 'vmware-player.desktop', 'VSCodium.desktop', 'bzu-gmb.desktop', 'org.gnome.Settings.desktop', 'org.gnome.tweaks.desktop', 'pavucontrol-gtk.desktop', 'org.corectrl.corectrl.desktop', 'org.gnome.Extensions.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Calculator.desktop', 'org.gnome.Screenshot.desktop', 'kde5-org.kde.krita.desktop', 'org.inkscape.Inkscape.desktop', 'nemo.desktop', 'audacious-gtk.desktop', 'audacity.desktop', 'org.shotcut.Shotcut.desktop', 'org.kde.kdenlive.desktop', 'com.obsproject.Studio.desktop', 'org.qbittorrent.qBittorrent.desktop', 'firefox.desktop', 'telegramdesktop.desktop', 'PortProton.desktop', 'protonup-qt.desktop', 'steam.desktop']"
-
-#4
-gsettings set org.gnome.mutter dynamic-workspaces false
-gsettings set org.gnome.desktop.wm.preferences num-workspaces 4
-gsettings set org.gnome.desktop.wm.preferences button-layout "appmenu:minimize,maximize,close"
-gsettings set org.gnome.mutter attach-modal-dialogs false
-gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
-gsettings set org.gnome.desktop.interface color-scheme prefer-dark
-gsettings set org.gnome.desktop.wm.preferences theme Adwaita
-gsettings set org.gnome.gedit.preferences.editor scheme oblivion
-gsettings set  org.gnome.desktop.interface cursor-theme elementary
-gsettings set org.gnome.desktop.interface icon-theme Numix-Circle
 
 #5
 ##################################################################################
@@ -314,6 +319,7 @@ gpgcheck=0
 enabled=1
 cost=999" > /tmp/rosa_gaming.repo
 echo "${pass_user}" | sudo -S mv -f /tmp/rosa_gaming.repo /etc/yum.repos.d
+
 ##################################################################################
 echo "подключение репозитория: mesa-redroot-devel"
 echo "[mesa-redroot-devel-x86_64]
@@ -330,6 +336,7 @@ gpgcheck=0
 enabled=1
 cost=1000" > /tmp/mesa-redroot-devel.repo
 echo "${pass_user}" | sudo -S mv -f /tmp/mesa-redroot-devel.repo /etc/yum.repos.d
+
 ##################################################################################
 echo "подключение репозитория: rosa-gaming-system-apps"
 echo "[rosa-gaming-system-apps-x86_64]
@@ -349,23 +356,39 @@ echo "${pass_user}" | sudo -S mv -f /tmp/rosa-gaming-system-apps.repo /etc/yum.r
 ##################################################################################
 
 #6
-echo "${pass_user}" | sudo -S dnf --refresh distrosync -y
+# установка  обновление системы
+echo "${pass_user}" | sudo -S dnf update -y
+echo "${pass_user}" | sudo -S dnf distro-sync -y
+echo "${pass_user}" | sudo -S dnf autoremove -y
+echo "${pass_user}" | sudo -S dnf clean packages
 
 #7
+if [ -e /usr/bin/gnome-shell ];then
 echo "${pass_user}" | sudo -S dnf remove -y gnome-robots four-in-a-row gnuchess aislerior gnome-chess gnome-mahjongg gnome-sudoku gnome-tetravex iagno lightsoff tail five-or-more gnome-klotski kmahjongg kmines klines kpat
-
+fi
 #8
+echo "установка актуально ядра Xanmod"
 echo "${pass_user}" | sudo -S dnf install -y kernel-6.5-xanmod.x86_64 kernel-6.5-xanmod-uml.x86_64 kernel-6.5-xanmod-uml-modules kernel-6.5-xanmod-devel
-echo "${pass_user}" | sudo -S dnf remove -y rtl8821au-blacklist rtl8821ce-blacklist
+
 #9
+echo "установка исталятора python3-pip и важных дополнений"
 echo "${pass_user}" | sudo -S dnf install -y python3-pip
 pip3 install Xlib pygame pywebview
-echo "${pass_user}" | sudo -S dnf install -y cpupower virt-manager virt-manager-common qemu.x86_64 qemu.i686 qemu-common.x86_64 qemu-common.i686 qemu-device-display-virtio-gpu.x86_64 qemu-device-display-virtio-gpu.i686 qemu-device-display-virtio-gpu-pci.x86_64 qemu-device-display-virtio-gpu-pci.i686 qemu-kvm nemo lib64nemo-extensions-devel lib64nemo-extensions1 lib64nemo-gir3.0 nemo-audio-tab nemo-compare nemo-fileroller nemo-image-converter nemo-python nemo-python-devel nemo-pastebin meld gksu stacer wavemon cpu-x psensor kdiskmark mangohud vkbasalt goverlay gamescope system-monitoring-center encfs fceux krita kdenlive steam
-echo "${pass_user}" | sudo -S dnf install -y --best --allowerasing inxi yad zenity xow libusb-compat0.1_4 paprefs pavucontrol ananicy p7zip python3 grub-customizer libfuse2-devel libfuse3-devel libssl1.1 neofetch git meson ninja gcc gcc-c++ cmake glibc-devel dbus-devel glslang vulkan lib64vulkan-devel.x86_64 lib64vulkan-intel-devel lib64vulkan1 libvulkan-devel libvulkan-intel-devel.i686 libvulkan1 fio
+echo "установка виртуализации kvm/qemu"
+echo "${pass_user}" | sudo -S dnf install -y virt-manager virt-manager-common qemu.x86_64 qemu.i686 qemu-common.x86_64 qemu-common.i686 qemu-device-display-virtio-gpu.x86_64 qemu-device-display-virtio-gpu.i686 qemu-device-display-virtio-gpu-pci.x86_64 qemu-device-display-virtio-gpu-pci.i686 qemu-kvm 
+echo "установка дополнительгого системного ПО для оптимизации системы и железа для компьютерных игр на Linux"
+echo "${pass_user}" | sudo -S dnf install -y nemo lib64nemo-extensions-devel lib64nemo-extensions1 lib64nemo-gir3.0 nemo-audio-tab nemo-compare nemo-fileroller nemo-image-converter nemo-python nemo-python-devel nemo-pastebin meld gksu stacer wavemon cpu-x psensor kdiskmark  system-monitoring-center encfs cpupower inxi yad zenity neofetch git meson ninja gcc gcc-c++ cmake 
+echo "установка дополнительных библиотек"
+echo "${pass_user}" | sudo -S dnf install -y --best --allowerasing libusb-compat0.1_4 paprefs pavucontrol ananicy p7zip python3 grub-customizer libfuse2-devel libfuse3-devel libssl1.1 glibc-devel dbus-devel glslang vulkan lib64vulkan-devel.x86_64 lib64vulkan-intel-devel lib64vulkan1 libvulkan-devel libvulkan-intel-devel.i686 libvulkan1 fio
+echo "установка ПО/утилит для компьютерных игр на Linux"
+echo "${pass_user}" | sudo -S dnf install -y mangohud vkbasalt goverlay gamescope gamescope-session fceux krita kdenlive xow steam
+
 
 #10
+echo "Установка и настройка corectrl"
 #echo "${pass_user}" | sudo -S dnf install -y gwe
 #объявляем нужные переменные для скрипта
+cd "/home/$USER"
 user_run_script_group=$USER
 script_dir="/home/$USER"
 polkit_version=`pkaction --version | grep -Eo '[0-9*'.']{1,}'`
@@ -401,12 +424,7 @@ echo "${pass_user}" | sudo -S cat "${dir_grub_file}/${grub_file_name}" | grep -o
 fi
 }
 
-# установка  обновление системы
-echo "${pass_user}" | sudo -S dnf update -y
-echo "${pass_user}" | sudo -S dnf distro-sync -y
-echo "${pass_user}" | sudo -S dnf autoremove -y
-echo "${pass_user}" | sudo -S dnf clean packages
-echo "${pass_user}" | sudo -S dnf reinstall -y corectrl
+echo "${pass_user}" | sudo -S dnf install -y corectrl
 
 #добовление маски в файл grub для полного управления питанием и частотами в драйвере amdgpu
 install_flags_grub_kernel_rosa ${grub_flag_base[0]} ${grub_flag_base[1]}
@@ -475,7 +493,7 @@ fi
 *)
 echo "###RUG - Rosa Utility for GAMING - КОВРИК###
 -t или --test           - тест системы на совместимость и проверка ресурсов
--i или --install        - автономная установка всего пакета rug-lite
+-fa --full-auto         - автономная установка всего пакета rug-lite
 "
 ;;
 esac

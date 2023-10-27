@@ -16,7 +16,7 @@ sudo dnf install -y yad gtksourceview3 lib64gtksourceview-3.0_1 pv;cd;rm -f rug-
 после установки доступны следующие команды в терминале:
 ```
 -t или --test           - тест системы на совместимость и проверка ресурсов
--i или --install        - автономная установка всего пакета rug-lite
+-fa --full-auto         - автономная установка всего пакета rug-lite
 ```
 пример: 
 rug-lite --test
