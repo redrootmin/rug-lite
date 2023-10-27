@@ -377,7 +377,7 @@ pip3 install Xlib pygame pywebview
 echo "установка виртуализации kvm/qemu"
 echo "${pass_user}" | sudo -S dnf install -y virt-manager virt-manager-common qemu.x86_64 qemu.i686 qemu-common.x86_64 qemu-common.i686 qemu-device-display-virtio-gpu.x86_64 qemu-device-display-virtio-gpu.i686 qemu-device-display-virtio-gpu-pci.x86_64 qemu-device-display-virtio-gpu-pci.i686 qemu-kvm 
 echo "установка дополнительгого системного ПО для оптимизации системы и железа для компьютерных игр на Linux"
-echo "${pass_user}" | sudo -S dnf install -y nemo lib64nemo-extensions-devel lib64nemo-extensions1 lib64nemo-gir3.0 nemo-audio-tab nemo-compare nemo-fileroller nemo-image-converter nemo-python nemo-python-devel nemo-pastebin meld gksu stacer wavemon cpu-x psensor kdiskmark  system-monitoring-center encfs cpupower inxi yad zenity neofetch git meson ninja gcc gcc-c++ cmake 
+echo "${pass_user}" | sudo -S dnf install -y nemo lib64nemo-extensions-devel lib64nemo-extensions1 lib64nemo-gir3.0 nemo-audio-tab nemo-compare nemo-fileroller nemo-image-converter nemo-python nemo-python-devel nemo-pastebin yad zenity neofetch git meson ninja gcc gcc-c++ cmake meld gksu stacer wavemon cpu-x psensor kdiskmark  system-monitoring-center encfs cpupower inxi ryzenadj  
 echo "установка дополнительных библиотек"
 echo "${pass_user}" | sudo -S dnf install -y --best --allowerasing libusb-compat0.1_4 paprefs pavucontrol ananicy p7zip python3 grub-customizer libfuse2-devel libfuse3-devel libssl1.1 glibc-devel dbus-devel glslang vulkan lib64vulkan-devel.x86_64 lib64vulkan-intel-devel lib64vulkan1 libvulkan-devel libvulkan-intel-devel.i686 libvulkan1 fio
 echo "установка ПО/утилит для компьютерных игр на Linux"
