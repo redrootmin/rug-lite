@@ -321,21 +321,20 @@ cost=999" > /tmp/rosa_gaming.repo
 echo "${pass_user}" | sudo -S mv -f /tmp/rosa_gaming.repo /etc/yum.repos.d
 
 ##################################################################################
-echo "подключение репозитория: mesa-redroot-devel"
-echo "[mesa-redroot-devel-x86_64]
-name=mesa-redroot-devel-x86_64
-baseurl=http://abf-downloads.rosalinux.ru/mesa_redroot_devel_personal/repository/rosa2021.1/x86_64/main/release/
+echo "[mesa-redroot-stable-x86_64]
+name=mesa-redroot-stable-x86_64
+baseurl=http://abf-downloads.rosalinux.ru/mesa_redroot_stable_personal/repository/rosa2021.1/x86_64/main/release/
 gpgcheck=0
 enabled=1
 cost=999
 
-[mesa-redroot-devel-i686]
-name=mesa-redroot-devel-i686
-baseurl=http://abf-downloads.rosalinux.ru/mesa_redroot_devel_personal/repository/rosa2021.1/i686/main/release/
+[mesa-redroot-stable-i686]
+name=mesa-redroot-stable-i686
+baseurl=http://abf-downloads.rosalinux.ru/mesa_redroot_stable_personal/repository/rosa2021.1/i686/main/release/
 gpgcheck=0
 enabled=1
-cost=1000" > /tmp/mesa-redroot-devel.repo
-echo "${pass_user}" | sudo -S mv -f /tmp/mesa-redroot-devel.repo /etc/yum.repos.d
+cost=1000" > /tmp/mesa-redroot-stable.repo
+echo "${pass_user}" | sudo mv /tmp/mesa-redroot-stable.repo /etc/yum.repos.d
 
 ##################################################################################
 echo "подключение репозитория: rosa-gaming-system-apps"
@@ -368,7 +367,7 @@ echo "${pass_user}" | sudo -S dnf remove -y gnome-robots four-in-a-row gnuchess 
 fi
 #8
 echo "установка актуально ядра Xanmod"
-echo "${pass_user}" | sudo -S dnf install -y kernel-6.5-xanmod.x86_64 kernel-6.5-xanmod-uml.x86_64 kernel-6.5-xanmod-uml-modules kernel-6.5-xanmod-devel
+echo "${pass_user}" | sudo -S dnf install -y kernel-6.6-xanmod kernel-6.6-xanmod-devel kernel-6.6-xanmod kernel-6.6-xanmod-uml kernel-6.6-xanmod-uml-modules kernel-xanmod-rosa-flow-abi
 
 #9
 echo "установка исталятора python3-pip и важных дополнений"
