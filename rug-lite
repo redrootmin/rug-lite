@@ -368,7 +368,7 @@ fi
 #8
 echo "установка актуально ядра Xanmod"
 echo "${pass_user}" | sudo -S dnf install -y kernel-6.6-xanmod kernel-6.6-xanmod-devel kernel-6.6-xanmod kernel-6.6-xanmod-uml kernel-6.6-xanmod-uml-modules kernel-xanmod-rosa-flow-abi 
-echo "${pass_user}" | sudo -S dnf install -y kernel-6.8-generic-devel kernel-6.8-xanmod-devel kernel-6.8-generic.x86_64 ernel-6.8-generic-doc.noarch kernel-6.8-rosa-flow-abi kernel-6.8-xanmod.x86_64 kernel-6.8-xanmod-doc kernel-6.8-xanmod-rosa-flow-abi
+echo "${pass_user}" | sudo -S dnf install -y kernel-6.8-xanmod-devel kernel-6.8-xanmod kernel-6.8-xanmod-rosa-flow-abi kernel-6.8-xanmod-doc
 
 #9
 echo "установка исталятора python3-pip и важных дополнений"
