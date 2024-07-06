@@ -299,7 +299,7 @@ fi
   gsettings set org.gnome.gedit.preferences.editor scheme oblivion
   gsettings set  org.gnome.desktop.interface cursor-theme elementary
   gsettings set org.gnome.desktop.interface icon-theme Numix-Circle
-
+  gsettings set org.gnome.desktop.screensaver lock-enabled false
 fi
 
 #5
@@ -368,7 +368,7 @@ fi
 #8
 echo "установка актуально ядра Xanmod"
 echo "${pass_user}" | sudo -S dnf install -y kernel-6.6-xanmod kernel-6.6-xanmod-devel kernel-6.6-xanmod kernel-6.6-xanmod-uml kernel-6.6-xanmod-uml-modules kernel-xanmod-rosa-flow-abi 
-echo "${pass_user}" | sudo -S dnf install -y kernel-6.8-xanmod-devel kernel-6.8-xanmod kernel-6.8-xanmod-rosa-flow-abi kernel-6.8-xanmod-doc
+echo "${pass_user}" | sudo -S dnf install -y kernel-6.9-xanmod kernel-6.9-xanmod-devel kernel-6.9-xanmod-doc kernel-6.9-xanmod-rosa-flow-abi
 
 #9
 echo "установка исталятора python3-pip и важных дополнений"
