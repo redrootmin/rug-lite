@@ -357,7 +357,7 @@ echo "${pass_user}" | sudo -S mv -f /tmp/rosa-gaming-system-apps.repo /etc/yum.r
 #6
 # установка  обновление системы
 echo "${pass_user}" | sudo -S dnf update -y
-echo "${pass_user}" | sudo -S dnf distro-sync -y
+echo "${pass_user}" | sudo -S dnf --refresh distro-sync -y
 echo "${pass_user}" | sudo -S dnf autoremove -y
 echo "${pass_user}" | sudo -S dnf clean packages
 
